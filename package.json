@@ -1,0 +1,55 @@
+{
+    "name": "apigen",
+    "version": "3.1.2",
+    "description": "Faster OpenAPI 2.X & 3.X → TypeScript code generator with pluggable Eta templates.",
+    "type": "module",
+    "license": "MIT",
+    "keywords": [
+        "openapi",
+        "swagger",
+        "codegen",
+        "typescript",
+        "eta",
+        "generator"
+    ],
+    "engines": {
+        "node": ">=20"
+    },
+    "main": "./dist/cjs/lib.cjs",
+    "module": "./dist/esm/lib.js",
+    "types": "./dist/esm/lib.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/esm/lib.d.ts",
+            "import": "./dist/esm/lib.js",
+            "require": "./dist/cjs/lib.cjs"
+        },
+        "./templates/*": "./dist/templates/*",
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "examples",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "rslib build",
+        "dev": "rslib build --watch",
+        "typecheck": "cross-env GOMEMLIMIT=1GiB node ../node_modules/typescript/bin/tsc -b --force",
+        "test": "vitest",
+        "test-ci": "vitest run",
+        "test-coverage": "vitest run --coverage",
+        "prepublishOnly": "npm run test-ci && npm run build"
+    },
+    "dependencies": {
+        "eta": "3.5.0",
+        "yaml": "2.6.1"
+    },
+    "devDependencies": {
+        "@rslib/core": "1.0.0",
+        "@types/node": "^22.0.0",
+        "@vitest/coverage-v8": "5.0.0",
+        "typescript": "^5.5.0",
+        "vitest": "5.0.0"
+    }
+}

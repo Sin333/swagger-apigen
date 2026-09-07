@@ -1,0 +1,2 @@
+export * from '<%= it.typesModule %>';
+export * as Api from '<%= it.endpointsModule %>';

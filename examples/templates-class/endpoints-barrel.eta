@@ -1,0 +1,4 @@
+<% const pascal = (s) => s.charAt(0).toUpperCase() + s.slice(1); -%>
+<% for (const m of it.modules) { -%>
+export { Service as <%= pascal(m.alias) %>Service } from './<%= m.tag %>';
+<% } -%>

@@ -1,0 +1,17 @@
+<% if (it.bundledTypeImports.length > 0 || it.typeImports.length > 0) { -%>
+import type {
+<% for (const name of it.bundledTypeImports) { -%>
+    <%= name %>,
+<% } -%>
+<% for (const name of it.typeImports) { -%>
+    <%= name %>,
+<% } -%>
+} from '<%= it.typesImportFrom %>';
+<% } -%>
+import { fetchApi } from '../../utils/fetch';
+
+/** Auto-generated file. Do not edit. */
+
+<% for (const src of it.endpoints) { -%>
+<%~ src %>
+<% } -%>

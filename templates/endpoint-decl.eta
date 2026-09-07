@@ -1,0 +1,3 @@
+<%~ it.doc -%>
+export const <%= it.functionName %> = (<%~ it.argSignature %>) =>
+    <%~ it.callExpression %>;

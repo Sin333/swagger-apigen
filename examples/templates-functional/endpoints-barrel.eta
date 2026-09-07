@@ -1,0 +1,3 @@
+<% for (const m of it.modules) { -%>
+export * as <%= m.alias %> from './<%= m.tag %>';
+<% } -%>

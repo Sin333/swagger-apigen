@@ -1,0 +1,10 @@
+fetchMyCustom<<%= it.responseType %>>({
+    uri: <%~ it.uri %>,
+    method: '<%= it.method %>',
+<% if (it.body) { -%>
+    body: <%= it.body %>,
+<% } -%>
+<% if (it.query) { -%>
+    query: <%= it.query %>,
+<% } -%>
+})

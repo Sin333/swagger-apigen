@@ -1,0 +1,7 @@
+<% for (const b of it.bundledTypes) { -%>
+<%~ b %>
+
+<% } -%>
+<% for (const decl of it.declarations) { -%>
+<%~ decl %>
+<% } -%>

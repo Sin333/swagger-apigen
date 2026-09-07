@@ -1,0 +1,4 @@
+<%~ it.doc -%>
+public static <%= it.functionName %>(<%~ it.argSignature %>): Promise<<%= it.responseType %>> {
+    return <%~ it.callExpression %>;
+}
