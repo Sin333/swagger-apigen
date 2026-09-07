@@ -16,11 +16,12 @@ export default defineConfig({
         externals: ['eta', 'yaml'],
         cleanDistPath: true,
     },
+    syntax: 'es2022',
+    bundle: false,
+    shims: { esm: { __dirname: true, __filename: true } },
     lib: [
         {
             format: 'esm',
-            syntax: 'es2022',
-            bundle: false,
             dts: { bundle: false },
             output: {
                 distPath: { root: 'dist/esm' },
@@ -29,12 +30,9 @@ export default defineConfig({
                     { from: './src/runtime/types.ts', to: './runtime/types.ts' },
                 ],
             },
-            shims: { esm: { __dirname: true, __filename: true } },
         },
         {
             format: 'cjs',
-            syntax: 'es2022',
-            bundle: false,
             dts: false,
             output: {
                 distPath: { root: 'dist/cjs' },
