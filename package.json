@@ -1,5 +1,5 @@
 {
-    "name": "apigen",
+    "name": "swagger-apigen",
     "version": "3.1.2",
     "description": "Faster OpenAPI 2.X & 3.X → TypeScript code generator with pluggable Eta templates.",
     "type": "module",
