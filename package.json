@@ -35,7 +35,7 @@
     "scripts": {
         "build": "rslib build",
         "dev": "rslib build --watch",
-        "typecheck": "cross-env GOMEMLIMIT=1GiB node ../node_modules/typescript/bin/tsc -b --force",
+        "typecheck": "tsc -b --force",
         "test": "vitest",
         "test-ci": "vitest run",
         "test-coverage": "vitest run --coverage",
@@ -47,9 +47,9 @@
     },
     "devDependencies": {
         "@rslib/core": "1.0.0",
-        "@types/node": "^22.0.0",
+        "@types/node": "26.4.1",
         "@vitest/coverage-v8": "5.0.0",
-        "typescript": "^5.5.0",
+        "typescript": "7.0.2",
         "vitest": "5.0.0"
     }
 }
