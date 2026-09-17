@@ -140,6 +140,7 @@ export type SchemaNode =
     | SchemaInteger
     | SchemaNumber
     | SchemaBoolean
+    | SchemaNull
     | SchemaEnum
     | SchemaAllOf
     | SchemaOneOf
@@ -202,6 +203,10 @@ export type SchemaNumber = SchemaBase & {
 
 export type SchemaBoolean = SchemaBase & {
     readonly kind: 'boolean';
+};
+
+export type SchemaNull = SchemaBase & {
+    readonly kind: 'null';
 };
 
 export type SchemaEnum = SchemaBase & {

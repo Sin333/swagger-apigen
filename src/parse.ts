@@ -594,6 +594,8 @@ const parseSchema = (ctx: ParseContext, raw: unknown, pointer: JsonPointer): Sch
             };
         case 'boolean':
             return { ...base, kind: 'boolean' };
+        case 'null':
+            return { ...base, kind: 'null' };
         default:
             ctx.warn(pointer, `Unknown schema type "${type}"`);
             return makeUnknown(pointer, base);

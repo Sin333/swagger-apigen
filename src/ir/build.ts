@@ -158,6 +158,7 @@ const buildRootType = (ctx: IrContext, name: string, node: SchemaNode): IrType =
         case 'integer':
         case 'number':
         case 'boolean':
+        case 'null':
         case 'unknown':
             return { ...base, kind: 'alias', target: buildExpr(ctx, node) };
     }
@@ -354,6 +355,8 @@ const buildExpr = (ctx: IrContext, node: SchemaNode): IrTypeExpr => {
             });
         case 'boolean':
             return applyNullable(node, { kind: 'boolean' });
+        case 'null':
+            return { kind: 'null' };
         case 'enum':
             return applyNullable(node, buildEnumExpr(node));
         case 'allOf':

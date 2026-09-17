@@ -105,6 +105,12 @@ describe('OpenAPI 3.1 support', () => {
         expect(result.diagnostics.filter((d) => d.severity === 'error')).toEqual([]);
     });
 
+    it('parses a standalone null schema used in oneOf responses', () => {
+        const result = parseOpenApi(wrap({ NullableValue: { type: 'null' } }));
+
+        expect(result.document.components.schemas.get('NullableValue')?.kind).toBe('null');
+    });
+
     it('keeps a plain string `type` untouched in 3.1', () => {
         const result = parseOpenApi(wrap({ Name: { type: 'string' } }));
         const node = result.document.components.schemas.get('Name');
