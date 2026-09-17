@@ -51,7 +51,7 @@ export const parseOpenApiFile = async (
     format: OpenApiSourceFormat = 'auto',
 ): Promise<ParseResult> => {
     const text = await readFile(filePath, 'utf8');
-    const resolved = format === 'auto' ? detectFormatByPath(filePath) ?? 'auto' : format;
+    const resolved = format === 'auto' ? (detectFormatByPath(filePath) ?? 'auto') : format;
     return parseOpenApi(text, resolved);
 };
 
@@ -211,7 +211,11 @@ const parsePathItem = (
     raw: Record<string, unknown>,
     pointer: JsonPointer,
 ): PathItemObject => {
-    const sharedParams = parseParameters(ctx, raw['parameters'], joinPointer(pointer, 'parameters'));
+    const sharedParams = parseParameters(
+        ctx,
+        raw['parameters'],
+        joinPointer(pointer, 'parameters'),
+    );
     const operations = new Map<HttpMethod, OperationObject>();
 
     for (const method of HTTP_METHODS) {
@@ -265,7 +269,7 @@ const mergeParameters = (
     if (local.length === 0) return inherited;
     const key = (p: ParameterObject) => `${p.in}:${p.name}`;
     const localKeys = new Set(local.map(key));
-    return [...inherited.filter(p => !localKeys.has(key(p))), ...local];
+    return [...inherited.filter((p) => !localKeys.has(key(p))), ...local];
 };
 
 // ---------------------------- Parameters ----------------------------------
@@ -297,7 +301,10 @@ const parseParameters = (
             continue;
         }
         if (!location || !VALID_PARAM_LOCATIONS.has(location)) {
-            ctx.error(itemPointer, `Parameter "${name}" has invalid "in": ${location ?? '<missing>'}`);
+            ctx.error(
+                itemPointer,
+                `Parameter "${name}" has invalid "in": ${location ?? '<missing>'}`,
+            );
             continue;
         }
         out.push({
@@ -463,7 +470,12 @@ const parseSecurityRequirements = (
         }
         const req = new Map<string, readonly string[]>();
         for (const [name, scopes] of Object.entries(item)) {
-            req.set(name, Array.isArray(scopes) ? scopes.filter((s): s is string => typeof s === 'string') : []);
+            req.set(
+                name,
+                Array.isArray(scopes)
+                    ? scopes.filter((s): s is string => typeof s === 'string')
+                    : [],
+            );
         }
         out.push(req);
     }
@@ -618,7 +630,7 @@ const readSchemaType = (
 
     const strings = type.filter((t): t is string => typeof t === 'string');
     const hasNull = strings.includes('null');
-    const nonNull = strings.filter(t => t !== 'null');
+    const nonNull = strings.filter((t) => t !== 'null');
 
     if (nonNull.length === 1) return { typeString: nonNull[0], nullableFromTypeArray: hasNull };
     if (nonNull.length === 0) return { typeString: undefined, nullableFromTypeArray: hasNull };
@@ -681,7 +693,11 @@ const parseObject = (
         properties,
         required,
         additionalProperties,
-        discriminator: parseDiscriminator(ctx, raw['discriminator'], joinPointer(pointer, 'discriminator')),
+        discriminator: parseDiscriminator(
+            ctx,
+            raw['discriminator'],
+            joinPointer(pointer, 'discriminator'),
+        ),
     };
 };
 
@@ -726,9 +742,9 @@ const parseEnum = (
     let baseType: 'string' | 'integer' | 'number';
     if (type === 'string' || type === 'integer' || type === 'number') {
         baseType = type;
-    } else if (values.every(v => typeof v === 'number' && Number.isInteger(v))) {
+    } else if (values.every((v) => typeof v === 'number' && Number.isInteger(v))) {
         baseType = 'integer';
-    } else if (values.every(v => typeof v === 'number')) {
+    } else if (values.every((v) => typeof v === 'number')) {
         baseType = 'number';
     } else {
         baseType = 'string';

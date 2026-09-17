@@ -99,7 +99,7 @@ const resolveDiscriminatorEnumMembers = (types: Map<string, IrType>): void => {
         for (const m of enumType.members) memberByValue.set(String(m.value), m.name);
 
         let changed = false;
-        const enrichedVariants = type.variants.map(v => {
+        const enrichedVariants = type.variants.map((v) => {
             if (!v.discriminatorValue) return v;
             const memberName = memberByValue.get(v.discriminatorValue);
             if (!memberName) return v;
@@ -227,7 +227,7 @@ const buildRootUnion = (
     base: { name: string; description?: string; deprecated: boolean },
     node: SchemaOneOf | SchemaAnyOf,
 ): IrType => {
-    const variants: IrUnionVariant[] = node.schemas.map(s => ({
+    const variants: IrUnionVariant[] = node.schemas.map((s) => ({
         type: buildExpr(ctx, s),
     }));
 
@@ -416,13 +416,13 @@ const buildAllOfExpr = (ctx: IrContext, node: SchemaAllOf): IrTypeExpr => {
     }
     return {
         kind: 'intersection',
-        members: node.schemas.map(s => buildExpr(ctx, s)),
+        members: node.schemas.map((s) => buildExpr(ctx, s)),
     };
 };
 
 const buildUnionExpr = (ctx: IrContext, node: SchemaOneOf | SchemaAnyOf): IrTypeExpr => ({
     kind: 'union',
-    members: node.schemas.map(s => buildExpr(ctx, s)),
+    members: node.schemas.map((s) => buildExpr(ctx, s)),
 });
 
 // --------------------------- Object internals -----------------------------
@@ -464,7 +464,13 @@ const buildEndpoint = (ctx: IrContext, op: OperationObject): IrEndpoint => {
 
     for (const p of op.parameters) {
         const dst =
-            p.in === 'path' ? pathParams : p.in === 'query' ? queryParams : p.in === 'header' ? headerParams : null;
+            p.in === 'path'
+                ? pathParams
+                : p.in === 'query'
+                  ? queryParams
+                  : p.in === 'header'
+                    ? headerParams
+                    : null;
         if (!dst) continue; // cookie params — skip
         dst.push(toIrParameter(ctx, p));
     }
@@ -517,7 +523,11 @@ const buildResponses = (ctx: IrContext, op: OperationObject): readonly IrRespons
     return out;
 };
 
-const JSON_MEDIA_PREFERENCE: readonly string[] = ['application/json', 'text/json', 'application/*+json'];
+const JSON_MEDIA_PREFERENCE: readonly string[] = [
+    'application/json',
+    'text/json',
+    'application/*+json',
+];
 
 const pickJsonMediaType = (
     content: ReadonlyMap<string, MediaTypeObject>,

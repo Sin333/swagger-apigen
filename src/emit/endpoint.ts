@@ -105,7 +105,7 @@ export const renderEndpoint = (
 const indentContinuation = (block: string, indent: string): string => {
     const lines = block.split('\n');
     if (lines.length <= 1) return block;
-    return [lines[0], ...lines.slice(1).map(l => (l.length > 0 ? indent + l : l))].join('\n');
+    return [lines[0], ...lines.slice(1).map((l) => (l.length > 0 ? indent + l : l))].join('\n');
 };
 
 const renderEndpointJsDoc = (endpoint: IrEndpoint): string => {
@@ -132,12 +132,15 @@ const renderArgsList = (args: readonly ArgSig[]): string => {
     if (args.length === 1 && !args[0]!.multiline) return args[0]!.body;
     if (args.length === 1) return args[0]!.body;
     // Multi-arg: each arg indented by 4, trailing comma, closing `)` on own line.
-    const indented = args.map(a => indentAll(a.body, '    '));
-    return '\n' + indented.map(a => `${a},`).join('\n') + '\n';
+    const indented = args.map((a) => indentAll(a.body, '    '));
+    return '\n' + indented.map((a) => `${a},`).join('\n') + '\n';
 };
 
 const indentAll = (src: string, indent: string): string =>
-    src.split('\n').map(l => indent + l).join('\n');
+    src
+        .split('\n')
+        .map((l) => indent + l)
+        .join('\n');
 
 const buildArgSignatures = (endpoint: IrEndpoint, config: ApigenConfig): readonly ArgSig[] => {
     const args: ArgSig[] = [];
@@ -154,18 +157,18 @@ const buildFirstArg = (endpoint: IrEndpoint, config: ApigenConfig): ArgSig | nul
     if (!hasPath && !hasQuery) return null;
 
     if (hasQuery && hasPath) {
-        const pathNames = endpoint.pathParams.map(p => toIdent(p.name, 'camel'));
+        const pathNames = endpoint.pathParams.map((p) => toIdent(p.name, 'camel'));
         const shape = renderShape([...endpoint.pathParams, ...endpoint.queryParams], config);
-        const destructure = `{\n${pathNames.map(n => `    ${n},`).join('\n')}\n    ...query\n}`;
+        const destructure = `{\n${pathNames.map((n) => `    ${n},`).join('\n')}\n    ...query\n}`;
         return { body: `${destructure}: ${shape}`, multiline: true };
     }
     if (hasQuery) {
         const shape = renderShape(endpoint.queryParams, config);
         return { body: `query: ${shape}`, multiline: true };
     }
-    const pathNames = endpoint.pathParams.map(p => toIdent(p.name, 'camel'));
+    const pathNames = endpoint.pathParams.map((p) => toIdent(p.name, 'camel'));
     const shape = renderShape(endpoint.pathParams, config);
-    const destructure = `{\n${pathNames.map(n => `    ${n},`).join('\n')}\n}`;
+    const destructure = `{\n${pathNames.map((n) => `    ${n},`).join('\n')}\n}`;
     return { body: `${destructure}: ${shape}`, multiline: true };
 };
 
@@ -175,14 +178,11 @@ const buildBodyArg = (bodyType: IrTypeExpr, config: ApigenConfig): ArgSig => {
     return { body: `data: ${wrapped}`, multiline: false };
 };
 
-const renderShape = (
-    params: readonly IrEndpointParameter[],
-    config: ApigenConfig,
-): string => {
+const renderShape = (params: readonly IrEndpointParameter[], config: ApigenConfig): string => {
     const ordered = config.sortProperties
         ? [...params].sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
         : params;
-    const lines = ordered.map(p => {
+    const lines = ordered.map((p) => {
         const doc = renderJsDocBlock(
             {
                 ...(p.description ? { description: p.description } : {}),
@@ -210,10 +210,10 @@ const pickResponseType = (endpoint: IrEndpoint, config: ApigenConfig): string =>
 
 const pickResponseInner = (endpoint: IrEndpoint, config: ApigenConfig): string | null => {
     for (const status of RESPONSE_STATUS_PREFERENCE) {
-        const hit = endpoint.responses.find(r => r.statusCode === status);
+        const hit = endpoint.responses.find((r) => r.statusCode === status);
         if (hit) return hit.type ? renderExpr(hit.type, config) : 'void';
     }
-    const first = endpoint.responses.find(r => /^2\d\d$/.test(r.statusCode));
+    const first = endpoint.responses.find((r) => /^2\d\d$/.test(r.statusCode));
     if (first) return first.type ? renderExpr(first.type, config) : 'void';
     return null;
 };
@@ -242,7 +242,8 @@ const collectTypeRefs = (endpoint: IrEndpoint, config: ApigenConfig): readonly s
                 return;
             case 'object-inline':
                 for (const p of expr.properties) visit(p.type);
-                if (typeof expr.additionalProperties !== 'boolean') visit(expr.additionalProperties);
+                if (typeof expr.additionalProperties !== 'boolean')
+                    visit(expr.additionalProperties);
                 return;
             default:
                 return;

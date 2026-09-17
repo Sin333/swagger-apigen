@@ -8,14 +8,22 @@
                 "operationId": "listPets",
                 "summary": "List pets",
                 "parameters": [
-                    { "name": "limit", "in": "query", "required": false, "schema": { "type": "integer", "format": "int32" } }
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": { "type": "integer", "format": "int32" }
+                    }
                 ],
                 "responses": {
                     "200": {
                         "description": "ok",
                         "content": {
                             "application/json": {
-                                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Pet" } }
+                                "schema": {
+                                    "type": "array",
+                                    "items": { "$ref": "#/components/schemas/Pet" }
+                                }
                             }
                         }
                     }
@@ -49,7 +57,12 @@
                 "tags": ["pets"],
                 "operationId": "getPetById",
                 "parameters": [
-                    { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "format": "int64" } }
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "integer", "format": "int64" }
+                    }
                 ],
                 "responses": {
                     "200": {

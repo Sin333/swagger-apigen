@@ -80,7 +80,7 @@ import { resolve } from 'node:path';
 import { ApiGen } from 'apigen';
 
 const result = await ApiGen.generate({
-    input: resolve('swagger.json'),                    // path or http(s) URL
+    input: resolve('swagger.json'), // path or http(s) URL
     outDir: resolve('src/api/generated'),
     // Point at one of the shipped examples \u2014 or your own folder
     templates: {
@@ -95,8 +95,9 @@ const result = await ApiGen.generate({
     },
 });
 
-const errors = [...result.parseDiagnostics, ...result.irDiagnostics]
-    .filter(d => d.severity === 'error');
+const errors = [...result.parseDiagnostics, ...result.irDiagnostics].filter(
+    (d) => d.severity === 'error',
+);
 if (errors.length > 0) {
     for (const d of errors) console.error(`  ${d.pointer}: ${d.message}`);
     process.exit(1);
@@ -119,7 +120,7 @@ npm run apigen
 import { ApiGen } from 'apigen';
 
 const result = await ApiGen.generate({
-    input: './swagger.json',              // path or http(s) URL
+    input: './swagger.json', // path or http(s) URL
     outDir: './src/api/generated',
     config: {
         typePrefix: 'Api',
@@ -137,8 +138,9 @@ console.log(`wrote ${result.writtenFiles.length} files in ${result.durationMs.to
 Diagnostics from parse + IR stages are surfaced on the result:
 
 ```ts
-const errors = [...result.parseDiagnostics, ...result.irDiagnostics]
-    .filter(d => d.severity === 'error');
+const errors = [...result.parseDiagnostics, ...result.irDiagnostics].filter(
+    (d) => d.severity === 'error',
+);
 if (errors.length > 0) process.exit(1);
 ```
 
@@ -147,13 +149,13 @@ if (errors.length > 0) process.exit(1);
 ```ts
 import { ApiGen } from 'apigen';
 
-ApiGen.generate(options)          // full pipeline: read → parse → IR → emit
-ApiGen.parseOpenApiFile(path)     // parse only, returns typed AST + diagnostics
-ApiGen.parseOpenApi(rawText)
-ApiGen.buildIr(document)          // OpenAPI AST → intermediate representation
-ApiGen.emit(ir, options)          // IR → files (used internally by generate)
-ApiGen.DEFAULT_CONFIG
-ApiGen.withDefaults(partial)      // merge partial config with defaults
+ApiGen.generate(options); // full pipeline: read → parse → IR → emit
+ApiGen.parseOpenApiFile(path); // parse only, returns typed AST + diagnostics
+ApiGen.parseOpenApi(rawText);
+ApiGen.buildIr(document); // OpenAPI AST → intermediate representation
+ApiGen.emit(ir, options); // IR → files (used internally by generate)
+ApiGen.DEFAULT_CONFIG;
+ApiGen.withDefaults(partial); // merge partial config with defaults
 ```
 
 Flat re-exports of the same functions are also available:
@@ -163,19 +165,19 @@ Flat re-exports of the same functions are also available:
 
 `ApigenConfig` — every knob is optional, sensible defaults in `DEFAULT_CONFIG`:
 
-| Field | Default | Purpose |
-|---|---|---|
-| `typePrefix` | `''` | Prefix added to every generated type name. |
-| `typesFileName` | `'types'` | Filename (without extension) for the types module. |
-| `sortTypes` | `true` | Alphabetically sort top-level type declarations. |
-| `sortRoutes` | `true` | Alphabetically sort endpoints by function name. |
-| `sortProperties` | `true` | Alphabetically sort object properties. |
-| `useInterfaceForObjects` | `false` | Emit `interface X extends A { … }` instead of `type X = A & { … }`. |
-| `useUnsafeRecord` | `false` | Bundle `UnsafeRecord<K,V>` and emit it in place of `Record`. |
-| `useNullableToOptional` | `false` | Bundle `NullableToOptional<T>` and wrap request bodies with it. |
-| `isNotNullResponse` | `false` | Bundle `RequiredData<T>` and wrap response types with it. |
-| `separateEndpointsByTag` | `true` | One file per OpenAPI tag (`false` → single `endpoints.ts`). |
-| `atomicSwap` | `true` | Emit to a temp dir, then `rename` over the target — IDE/git see one event and stale files from previous runs are wiped. Set `false` to write directly on top of `outDir` (files still get overwritten in place, only orphans stay behind). |
+| Field                    | Default   | Purpose                                                                                                                                                                                                                                    |
+| ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `typePrefix`             | `''`      | Prefix added to every generated type name.                                                                                                                                                                                                 |
+| `typesFileName`          | `'types'` | Filename (without extension) for the types module.                                                                                                                                                                                         |
+| `sortTypes`              | `true`    | Alphabetically sort top-level type declarations.                                                                                                                                                                                           |
+| `sortRoutes`             | `true`    | Alphabetically sort endpoints by function name.                                                                                                                                                                                            |
+| `sortProperties`         | `true`    | Alphabetically sort object properties.                                                                                                                                                                                                     |
+| `useInterfaceForObjects` | `false`   | Emit `interface X extends A { … }` instead of `type X = A & { … }`.                                                                                                                                                                        |
+| `useUnsafeRecord`        | `false`   | Bundle `UnsafeRecord<K,V>` and emit it in place of `Record`.                                                                                                                                                                               |
+| `useNullableToOptional`  | `false`   | Bundle `NullableToOptional<T>` and wrap request bodies with it.                                                                                                                                                                            |
+| `isNotNullResponse`      | `false`   | Bundle `RequiredData<T>` and wrap response types with it.                                                                                                                                                                                  |
+| `separateEndpointsByTag` | `true`    | One file per OpenAPI tag (`false` → single `endpoints.ts`).                                                                                                                                                                                |
+| `atomicSwap`             | `true`    | Emit to a temp dir, then `rename` over the target — IDE/git see one event and stale files from previous runs are wiped. Set `false` to write directly on top of `outDir` (files still get overwritten in place, only orphans stay behind). |
 
 ## Templates
 
@@ -202,14 +204,14 @@ await ApiGen.generate({
 
 ### Template contract
 
-| Template | Data (typed as) | Emits |
-|---|---|---|
-| `types-file.eta` | `TypesFileData` | The single `<typesFileName>.ts` module. |
-| `endpoints-file.eta` | `EndpointsFileData` | One endpoint module (per tag or flat). |
+| Template               | Data (typed as)       | Emits                                          |
+| ---------------------- | --------------------- | ---------------------------------------------- |
+| `types-file.eta`       | `TypesFileData`       | The single `<typesFileName>.ts` module.        |
+| `endpoints-file.eta`   | `EndpointsFileData`   | One endpoint module (per tag or flat).         |
 | `endpoints-barrel.eta` | `EndpointsBarrelData` | `endpoints/index.ts` re-exporting each module. |
-| `root-index.eta` | `RootIndexData` | Top-level `index.ts` for the generated tree. |
-| `endpoint-decl.eta` | `EndpointDeclContext` | Shape of a single endpoint declaration. |
-| `endpoint-call.eta` | `EndpointCallContext` | The HTTP call expression inside a declaration. |
+| `root-index.eta`       | `RootIndexData`       | Top-level `index.ts` for the generated tree.   |
+| `endpoint-decl.eta`    | `EndpointDeclContext` | Shape of a single endpoint declaration.        |
+| `endpoint-call.eta`    | `EndpointCallContext` | The HTTP call expression inside a declaration. |
 
 Every context type is exported from the library. Refer to
 [`src/emit/templates.ts`](./src/emit/templates.ts) and

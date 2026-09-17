@@ -66,8 +66,7 @@ export const quoteString = (s: string): string =>
  * TypeScript, so they don't need quoting here — only names with characters
  * outside the identifier alphabet do.
  */
-export const propKey = (name: string): string =>
-    IDENT_RE.test(name) ? name : quoteString(name);
+export const propKey = (name: string): string => (IDENT_RE.test(name) ? name : quoteString(name));
 
 /**
  * Turn arbitrary text into a valid TS identifier. Non-alphanumeric characters

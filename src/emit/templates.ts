@@ -69,8 +69,5 @@ export const renderEndpointsBarrel = (
     data: EndpointsBarrelData,
 ): Promise<string> => eta.renderStringAsync(source, data);
 
-export const renderRootIndex = (
-    eta: Eta,
-    source: string,
-    data: RootIndexData,
-): Promise<string> => eta.renderStringAsync(source, data);
+export const renderRootIndex = (eta: Eta, source: string, data: RootIndexData): Promise<string> =>
+    eta.renderStringAsync(source, data);

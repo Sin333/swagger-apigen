@@ -14,11 +14,11 @@
 import type { ApigenConfig } from '../config.ts';
 
 export const canonicalTypeName = (rawName: string, config: ApigenConfig): string => {
-    const parts = rawName.split('_').filter(p => p.length > 0);
+    const parts = rawName.split('_').filter((p) => p.length > 0);
     const base =
         parts.length === 0
             ? '_'
-            : parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join('');
+            : parts.map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join('');
     if (!config.typePrefix || base.startsWith(config.typePrefix)) return base;
     return config.typePrefix + base;
 };

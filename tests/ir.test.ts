@@ -13,7 +13,7 @@ describe('buildIr', () => {
         const { document } = await parseOpenApiFile(petstorePath);
         const ir = buildIr(document);
 
-        expect(ir.diagnostics.filter(d => d.severity === 'error')).toEqual([]);
+        expect(ir.diagnostics.filter((d) => d.severity === 'error')).toEqual([]);
         expect(ir.unresolvedRefs.size).toBe(0);
     });
 
@@ -24,13 +24,8 @@ describe('buildIr', () => {
         expect([...ir.types.keys()].sort()).toEqual(['NewPet', 'Pet', 'PetKind', 'StatusInfo']);
         expect(ir.endpoints).toHaveLength(4);
 
-        const methods = ir.endpoints.map(e => `${e.method.toUpperCase()} ${e.path}`).sort();
-        expect(methods).toEqual([
-            'GET /pets',
-            'GET /pets/{id}',
-            'GET /status',
-            'POST /pets',
-        ]);
+        const methods = ir.endpoints.map((e) => `${e.method.toUpperCase()} ${e.path}`).sort();
+        expect(methods).toEqual(['GET /pets', 'GET /pets/{id}', 'GET /status', 'POST /pets']);
     });
 
     it('classifies PetKind as an enum', async () => {

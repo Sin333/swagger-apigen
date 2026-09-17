@@ -88,19 +88,14 @@ export type GenerateResult = {
  * @param ir      Result of {@link buildIr}.
  * @param options Output location and per-run overrides.
  */
-export const generate = async (
-    ir: IrModel,
-    options: GenerateOptions,
-): Promise<GenerateResult> => {
+export const generate = async (ir: IrModel, options: GenerateOptions): Promise<GenerateResult> => {
     const started = performance.now();
     const config = withDefaults(options.config);
     const eta = createEta();
     const sources = resolveTemplateSources(options.templates);
 
     const outDirAbs = resolve(options.outDir);
-    const stagingDir = config.atomicSwap
-        ? await mkdtemp(resolve(tmpdir(), 'apigen-'))
-        : outDirAbs;
+    const stagingDir = config.atomicSwap ? await mkdtemp(resolve(tmpdir(), 'apigen-')) : outDirAbs;
     if (!config.atomicSwap) {
         await mkdir(stagingDir, { recursive: true });
     }
@@ -122,7 +117,10 @@ export const generate = async (
     // ------- root index ---------
     const typesModule = `./${config.typesFileName}`;
     const endpointsModule = './endpoints';
-    const rootIndex = await renderRootIndex(eta, sources.rootIndex, { typesModule, endpointsModule });
+    const rootIndex = await renderRootIndex(eta, sources.rootIndex, {
+        typesModule,
+        endpointsModule,
+    });
     await writeStaged(stagingDir, 'index.ts', rootIndex, writtenFiles);
 
     if (config.atomicSwap) {
@@ -130,7 +128,9 @@ export const generate = async (
     }
 
     return {
-        writtenFiles: writtenFiles.map(f => (config.atomicSwap ? f.replace(stagingDir, outDirAbs) : f)),
+        writtenFiles: writtenFiles.map((f) =>
+            config.atomicSwap ? f.replace(stagingDir, outDirAbs) : f,
+        ),
         durationMs: performance.now() - started,
         stagingDir,
     };
@@ -150,7 +150,7 @@ const renderTypesFileContent = async (
               canonicalTypeName(a.name, config) < canonicalTypeName(b.name, config) ? -1 : 1,
           )
         : types;
-    const declarations = sorted.map(t => renderType(t, config));
+    const declarations = sorted.map((t) => renderType(t, config));
     const bundledTypes: string[] = [];
     if (config.useUnsafeRecord) bundledTypes.push(loadRuntimeType('UnsafeRecord'));
     if (config.useNullableToOptional) bundledTypes.push(loadRuntimeType('NullableToOptional'));
@@ -179,7 +179,7 @@ const emitTagBundle = async (
 
     for (const [tag, list] of [...byTag.entries()].sort(([a], [b]) => (a < b ? -1 : 1))) {
         const fileName = normalizeTagIdent(tag);
-        const rendered = list.map(e =>
+        const rendered = list.map((e) =>
             renderEndpoint(e, namer, config, eta, sources.endpointCall, sources.endpointDecl),
         );
         const orderedRendered = config.sortRoutes
@@ -195,7 +195,7 @@ const emitTagBundle = async (
             typeImports,
             bundledTypeImports,
             typesImportFrom,
-            endpoints: orderedRendered.map(r => r.source),
+            endpoints: orderedRendered.map((r) => r.source),
         });
 
         const alias = toIdent(fileName, 'camel');
@@ -216,7 +216,7 @@ const emitFlatEndpoints = async (
     writtenFiles: string[],
 ): Promise<void> => {
     const namer = new RouteNamer();
-    const rendered = ir.endpoints.map(e =>
+    const rendered = ir.endpoints.map((e) =>
         renderEndpoint(e, namer, config, eta, sources.endpointCall, sources.endpointDecl),
     );
     const orderedRendered = config.sortRoutes
@@ -230,7 +230,7 @@ const emitFlatEndpoints = async (
         typeImports: [...typeRefs].sort(),
         bundledTypeImports: collectBundledImports(config),
         typesImportFrom: `./${config.typesFileName}`,
-        endpoints: orderedRendered.map(r => r.source),
+        endpoints: orderedRendered.map((r) => r.source),
     });
     await writeStaged(stagingDir, 'endpoints.ts', source, writtenFiles);
 };
@@ -301,4 +301,7 @@ const atomicSwap = async (stagingDir: string, outDir: string): Promise<void> => 
 };
 
 const isEXDEV = (err: unknown): boolean =>
-    typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'EXDEV';
+    typeof err === 'object' &&
+    err !== null &&
+    'code' in err &&
+    (err as { code: string }).code === 'EXDEV';

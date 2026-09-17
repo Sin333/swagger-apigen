@@ -35,14 +35,14 @@ describe('generate (end-to-end)', () => {
             },
         });
 
-        expect(result.parseDiagnostics.filter(d => d.severity === 'error')).toEqual([]);
-        expect(result.irDiagnostics.filter(d => d.severity === 'error')).toEqual([]);
+        expect(result.parseDiagnostics.filter((d) => d.severity === 'error')).toEqual([]);
+        expect(result.irDiagnostics.filter((d) => d.severity === 'error')).toEqual([]);
         expect(result.writtenFiles.length).toBeGreaterThan(0);
 
-        const written = result.writtenFiles.map(f => f.replaceAll('\\', '/'));
-        expect(written.some(f => f.endsWith('/types.ts'))).toBe(true);
-        expect(written.some(f => f.endsWith('/index.ts'))).toBe(true);
-        expect(written.some(f => f.endsWith('/endpoints/index.ts'))).toBe(true);
+        const written = result.writtenFiles.map((f) => f.replaceAll('\\', '/'));
+        expect(written.some((f) => f.endsWith('/types.ts'))).toBe(true);
+        expect(written.some((f) => f.endsWith('/index.ts'))).toBe(true);
+        expect(written.some((f) => f.endsWith('/endpoints/index.ts'))).toBe(true);
     });
 
     it('emits ApiPet with the typePrefix and preserves enum members', async () => {

@@ -92,8 +92,8 @@ const main = async (): Promise<number> => {
         rssDeltaBytes: memAfter - memBefore,
     });
 
-    const parseErrors = parseResult.diagnostics.filter(d => d.severity === 'error').length;
-    const irErrors = ir.diagnostics.filter(d => d.severity === 'error').length;
+    const parseErrors = parseResult.diagnostics.filter((d) => d.severity === 'error').length;
+    const irErrors = ir.diagnostics.filter((d) => d.severity === 'error').length;
     return parseErrors + irErrors > 0 ? 1 : 0;
 };
 
@@ -121,10 +121,10 @@ const printSummary = (input: SummaryInput): void => {
     } = input;
     const { document, diagnostics, references, durationMs, format } = parseResult;
 
-    const parseErrors = diagnostics.filter(d => d.severity === 'error');
-    const parseWarns = diagnostics.filter(d => d.severity === 'warning');
-    const irErrors = ir.diagnostics.filter(d => d.severity === 'error');
-    const irWarns = ir.diagnostics.filter(d => d.severity === 'warning');
+    const parseErrors = diagnostics.filter((d) => d.severity === 'error');
+    const parseWarns = diagnostics.filter((d) => d.severity === 'warning');
+    const irErrors = ir.diagnostics.filter((d) => d.severity === 'error');
+    const irWarns = ir.diagnostics.filter((d) => d.severity === 'warning');
 
     const parseCounts = countSchemas(document);
     const irCounts = countIrTypes(ir);
@@ -171,7 +171,7 @@ const printSummary = (input: SummaryInput): void => {
                       '=== Emit (Phase 3) ===',
                       `Type prefix:         ${typePrefix || '<none>'}`,
                       `Files written:       ${writtenFiles.length}`,
-                      ...writtenFiles.map(f => `  ${f}`),
+                      ...writtenFiles.map((f) => `  ${f}`),
                       `Generate time:       ${generateDurationMs.toFixed(1)} ms`,
                   ]
                 : []),
@@ -197,7 +197,7 @@ const printSummary = (input: SummaryInput): void => {
 
 const printDiagnosticList = (
     diags: readonly { pointer: string; message: string }[],
-    limit: number = 20,
+    limit = 20,
 ): void => {
     for (const d of diags.slice(0, limit)) {
         stdout.write(`  ${d.pointer || '/'}\n    ${d.message}\n`);
@@ -215,7 +215,14 @@ type SchemaCounts = {
 };
 
 const countSchemas = (document: OpenApiDocument): SchemaCounts => {
-    const counts: SchemaCounts = { object: 0, enum: 0, primitive: 0, composition: 0, ref: 0, unknown: 0 };
+    const counts: SchemaCounts = {
+        object: 0,
+        enum: 0,
+        primitive: 0,
+        composition: 0,
+        ref: 0,
+        unknown: 0,
+    };
     for (const schema of document.components.schemas.values()) {
         bumpSchemaCount(counts, schema);
     }

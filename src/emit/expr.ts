@@ -46,15 +46,17 @@ const renderExprAt = (expr: IrTypeExpr, needsParens: boolean, config: ApigenConf
         }
         case 'union': {
             if (expr.members.length === 0) return 'never';
-            if (expr.members.length === 1) return renderExprAt(expr.members[0]!, needsParens, config);
-            const parts = expr.members.map(m => renderExprAt(m, true, config));
+            if (expr.members.length === 1)
+                return renderExprAt(expr.members[0]!, needsParens, config);
+            const parts = expr.members.map((m) => renderExprAt(m, true, config));
             const joined = parts.join(' | ');
             return needsParens ? `(${joined})` : joined;
         }
         case 'intersection': {
             if (expr.members.length === 0) return 'unknown';
-            if (expr.members.length === 1) return renderExprAt(expr.members[0]!, needsParens, config);
-            const parts = expr.members.map(m => renderExprAt(m, true, config));
+            if (expr.members.length === 1)
+                return renderExprAt(expr.members[0]!, needsParens, config);
+            const parts = expr.members.map((m) => renderExprAt(m, true, config));
             const joined = parts.join(' & ');
             return needsParens ? `(${joined})` : joined;
         }
@@ -83,7 +85,9 @@ export const renderInlineObject = (
     const memberLines: string[] = [];
     for (const p of sorted) memberLines.push(renderPropertyLine(p, '    ', config));
     if (typeof additionalProperties !== 'boolean') {
-        memberLines.push(`    [key: string]: ${renderExprAt(additionalProperties, false, config)};`);
+        memberLines.push(
+            `    [key: string]: ${renderExprAt(additionalProperties, false, config)};`,
+        );
     }
     return `{\n${memberLines.join('\n')}\n}`;
 };
@@ -123,5 +127,5 @@ const sortByName = <T extends { name: string }>(items: readonly T[]): readonly T
 export const indentBlock = (block: string, indent: string): string =>
     block
         .split('\n')
-        .map(l => (l.length > 0 ? indent + l : l))
+        .map((l) => (l.length > 0 ? indent + l : l))
         .join('\n');

@@ -2,19 +2,21 @@
     "name": "swagger-apigen",
     "version": "3.1.2",
     "description": "Faster OpenAPI 2.X & 3.X → TypeScript code generator with pluggable Eta templates.",
-    "type": "module",
-    "license": "MIT",
     "keywords": [
+        "codegen",
+        "eta",
+        "generator",
         "openapi",
         "swagger",
-        "codegen",
-        "typescript",
-        "eta",
-        "generator"
+        "typescript"
     ],
-    "engines": {
-        "node": ">=20"
-    },
+    "license": "MIT",
+    "files": [
+        "dist",
+        "examples",
+        "README.md"
+    ],
+    "type": "module",
     "main": "./dist/cjs/lib.cjs",
     "module": "./dist/esm/lib.js",
     "types": "./dist/esm/lib.d.ts",
@@ -27,14 +29,13 @@
         "./templates/*": "./dist/templates/*",
         "./package.json": "./package.json"
     },
-    "files": [
-        "dist",
-        "examples",
-        "README.md"
-    ],
     "scripts": {
         "build": "rslib build",
         "dev": "rslib build --watch",
+        "lint": "tsc --noEmit && oxlint",
+        "lint:fix": "oxlint --fix .",
+        "format": "oxfmt --check",
+        "format:fix": "oxfmt --write .",
         "typecheck": "tsc -b --force",
         "test": "vitest",
         "test-ci": "vitest run",
@@ -49,7 +50,12 @@
         "@rslib/core": "1.0.0",
         "@types/node": "26.4.1",
         "@vitest/coverage-v8": "5.0.0",
+        "oxfmt": "0.66.0",
+        "oxlint": "1.79.0",
         "typescript": "7.0.2",
         "vitest": "5.0.0"
+    },
+    "engines": {
+        "node": ">=20"
     }
 }

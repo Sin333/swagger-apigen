@@ -36,7 +36,7 @@ export const renderJsDocBlock = (
         readonly format?: string | null;
         readonly deprecated?: boolean;
     },
-    indent: string = '',
+    indent = '',
 ): string => {
     const lines: string[] = [];
     if (parts.description) {

@@ -14,7 +14,7 @@ describe('parseOpenApiFile', () => {
         expect(result.format).toBe('json');
         expect(result.document.openapi).toBe('3.0.0');
         expect(result.document.info.title).toBe('Petstore');
-        expect(result.diagnostics.filter(d => d.severity === 'error')).toEqual([]);
+        expect(result.diagnostics.filter((d) => d.severity === 'error')).toEqual([]);
     });
 
     it('collects the expected paths and schemas', async () => {
@@ -44,7 +44,7 @@ describe('parseOpenApi (from string)', () => {
 
         expect(result.format).toBe('json');
         expect(result.document.paths.size).toBe(0);
-        expect(result.diagnostics.filter(d => d.severity === 'error')).toEqual([]);
+        expect(result.diagnostics.filter((d) => d.severity === 'error')).toEqual([]);
     });
 });
 
@@ -60,7 +60,7 @@ describe('OpenAPI 3.1 support', () => {
     it('accepts a 3.1.x version string', () => {
         const result = parseOpenApi(wrap({}));
         expect(result.document.openapi).toBe('3.1.0');
-        expect(result.diagnostics.filter(d => d.severity === 'error')).toEqual([]);
+        expect(result.diagnostics.filter((d) => d.severity === 'error')).toEqual([]);
     });
 
     it('rejects versions outside 3.0.x / 3.1.x / 3.2.x', () => {
@@ -88,10 +88,10 @@ describe('OpenAPI 3.1 support', () => {
         );
 
         expect(result.document.openapi).toBe('3.2.0');
-        expect(result.diagnostics.filter(d => d.severity === 'error')).toEqual([]);
+        expect(result.diagnostics.filter((d) => d.severity === 'error')).toEqual([]);
         expect(
             result.diagnostics.some(
-                d => d.severity === 'warning' && d.message.includes('OpenAPI 3.2'),
+                (d) => d.severity === 'warning' && d.message.includes('OpenAPI 3.2'),
             ),
         ).toBe(true);
     });
@@ -102,7 +102,7 @@ describe('OpenAPI 3.1 support', () => {
 
         expect(node?.kind).toBe('string');
         expect(node?.nullable).toBe(true);
-        expect(result.diagnostics.filter(d => d.severity === 'error')).toEqual([]);
+        expect(result.diagnostics.filter((d) => d.severity === 'error')).toEqual([]);
     });
 
     it('keeps a plain string `type` untouched in 3.1', () => {
@@ -121,15 +121,13 @@ describe('OpenAPI 3.1 support', () => {
     });
 
     it('warns on primitive type unions and marks the schema nullable if `null` is present', () => {
-        const result = parseOpenApi(
-            wrap({ Mixed: { type: ['string', 'integer', 'null'] } }),
-        );
+        const result = parseOpenApi(wrap({ Mixed: { type: ['string', 'integer', 'null'] } }));
         const node = result.document.components.schemas.get('Mixed');
 
         expect(node?.nullable).toBe(true);
         expect(
             result.diagnostics.some(
-                d => d.severity === 'warning' && d.message.includes('type union'),
+                (d) => d.severity === 'warning' && d.message.includes('type union'),
             ),
         ).toBe(true);
     });

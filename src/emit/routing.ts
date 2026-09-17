@@ -51,7 +51,10 @@ export class RouteNamer {
 export const renderUri = (endpoint: IrEndpoint): string => {
     const stripped = endpoint.path.startsWith('/') ? endpoint.path.slice(1) : endpoint.path;
     if (!stripped.includes('{')) return `'${stripped}'`;
-    const templated = stripped.replaceAll(PATH_PARAM_RE, (_m, name: string) => `\${${toIdent(name, 'camel')}}`);
+    const templated = stripped.replaceAll(
+        PATH_PARAM_RE,
+        (_m, name: string) => `\${${toIdent(name, 'camel')}}`,
+    );
     return `\`${templated}\``;
 };
 
@@ -60,8 +63,8 @@ const deriveRouteName = (endpoint: IrEndpoint): string => {
     // Synthesize from path: keep alphanumeric non-`api` non-parameter segments.
     const parts = endpoint.path
         .split('/')
-        .map(seg => seg.trim())
-        .filter(seg => seg.length > 0 && !seg.startsWith('{') && seg.toLowerCase() !== 'api');
+        .map((seg) => seg.trim())
+        .filter((seg) => seg.length > 0 && !seg.startsWith('{') && seg.toLowerCase() !== 'api');
     return parts.map(pascal).join('');
 };
 
