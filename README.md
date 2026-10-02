@@ -45,7 +45,7 @@ can override.
 ## Install
 
 ```sh
-npm install apigen
+npm install fast-apigen
 # or
 yarn add apigen
 # or
@@ -57,7 +57,7 @@ pnpm add apigen
 ### 1. Add the dependency
 
 ```sh
-npm install --save-dev apigen
+npm install --save-dev fast-apigen
 ```
 
 ### 2. Register a script in `package.json`
@@ -77,7 +77,7 @@ first or wrap it with `tsx` / `ts-node`.
 
 ```ts
 import { resolve } from 'node:path';
-import { ApiGen } from 'apigen';
+import { ApiGen } from 'fast-apigen';
 
 const result = await ApiGen.generate({
     input: resolve('swagger.json'), // path or http(s) URL

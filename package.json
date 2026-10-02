@@ -1,5 +1,5 @@
 {
-    "name": "swagger-apigen",
+    "name": "fast-apigen",
     "version": "3.1.2",
     "description": "Faster OpenAPI 2.X & 3.X → TypeScript code generator with pluggable Eta templates.",
     "keywords": [
@@ -11,6 +11,17 @@
         "typescript"
     ],
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Sin333/swagger-apigen.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Sin333/swagger-apigen/issues"
+    },
+    "homepage": "https://github.com/Sin333/swagger-apigen#readme",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
     "files": [
         "dist",
         "examples",
